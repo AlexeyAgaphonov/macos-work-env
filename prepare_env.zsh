@@ -109,8 +109,8 @@ install_cask AeroSpace nikitabobko/tap/aerospace
 echo "==> Configuring AeroSpace"
 xattr -d com.apple.quarantine /Applications/AeroSpace.app 2>/dev/null || true
 if [[ ! -f ~/.aerospace.toml ]]; then
-    echo "  -> Copying default config..."
-    cp /Applications/AeroSpace.app/Contents/Resources/default-config.toml ~/.aerospace.toml
+    echo "  -> Copying config..."
+    cp "${0:A:h}/.aerospace.toml" ~/.aerospace.toml
 else
     echo "  -> Config already exists"
 fi
