@@ -70,6 +70,19 @@ add_to_zshrc 'eval "$(zoxide init zsh)"'
 install_formula fzf fzf
 add_to_zshrc 'eval "$(fzf --zsh)"'
 
+echo "==> Ensuring ~/Work/Utils exists"
+[[ -d ~/Work/Utils ]] || { mkdir -p ~/Work/Utils; echo "  -> Created ~/Work/Utils"; }
+
+echo "==> Checking fzf-tab"
+if [[ ! -d ~/Work/Utils/fzf-tab ]]; then
+    echo "  -> Cloning fzf-tab..."
+    git clone https://github.com/Aloxaf/fzf-tab ~/Work/Utils/fzf-tab
+else
+    echo "  -> Already installed"
+fi
+add_to_zshrc 'autoload -U compinit; compinit'
+add_to_zshrc 'source ~/Work/Utils/fzf-tab/fzf-tab.plugin.zsh'
+
 echo "==> Checking zoxide+fzf integration (zi)"
 if ! grep -qF 'zi()' ~/.zshrc; then
     cat >> ~/.zshrc <<'EOF'
@@ -103,7 +116,13 @@ fi
 # ---------------------------------------------------------------------------
 install_cask Ghostty ghostty
 install_cask Zed zed
-install_cask "Agave Nerd Font" font-agave-nerd-font
+echo "==> Checking Agave Nerd Font"
+if ls ~/Library/Fonts/AgaveNerdFont* &>/dev/null 2>&1; then
+    echo "  -> Already installed"
+else
+    echo "  -> Installing Agave Nerd Font..."
+    brew install --cask font-agave-nerd-font
+fi
 install_cask AeroSpace nikitabobko/tap/aerospace
 
 echo "==> Configuring AeroSpace"
